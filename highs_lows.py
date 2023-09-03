@@ -2,6 +2,13 @@ import csv
 from matplotlib import pyplot as plt
 from datetime import datetime
 
+while (True):
+    print('This dataset contains monthly weather data for SeaTac from 1948 to 2023.')
+    year = int(input('Which year would you like to see? '))
+    if 1948 <= year <= 2023:
+        break
+    print('Please input a valid year.')
+
 filename = 'seatac_monthly.csv'
 with open(filename) as f:
     reader = csv.reader(f)
@@ -14,7 +21,7 @@ with open(filename) as f:
     highs, lows, dates = [], [], []
     for row in reader:
         current_date = datetime.strptime(row[date_idx], '%Y-%m')
-        if current_date.year < 2017:
+        if current_date.year != year:
             continue
         try:
             cur_high = float(row[max_temp_idx])
