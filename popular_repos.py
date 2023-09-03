@@ -1,21 +1,25 @@
 import requests
 import pygal
 
-# make an API call and store the response
-url = 'https://api.github.com/search/repositories?q=language:python&sort=stars'
-r = requests.get(url)
-print('Status code:', r.status_code)
+while (True):
+    print("This application returns a chart of popular Github repos by language.")
+    language = input("Which programming language are you interested in? ")
+
+    # make an API call and store the response
+    url = 'https://api.github.com/search/repositories?q=language:' + language.lower() + '&sort=stars'
+    r = requests.get(url)
+    print('Status code:', r.status_code)
+    if r.status_code == 200:
+        with open('langauges.txt', 'a') as f:
+            f.write(language + '\n')
+        break
+    print('Could not find requested language. Please try again.')
+
 response_dict = r.json()
 print('Total repositories:', response_dict['total_count'])
 repo_dicts = response_dict['items']
 print('Repositories returned:', len(repo_dicts))
 
-'''
-repo_dict = repo_dicts[0]
-print('\nKeys:', len(repo_dict))
-for key in sorted(repo_dict.keys()):
-    print(key) 
-'''
 # examine top repos
 names, plot_dicts = [], []
 for repo_dict in repo_dicts:
@@ -40,7 +44,7 @@ my_config.show_y_guides = False
 my_config.width = 1000
 
 chart = pygal.Bar(my_config)
-chart.title = 'Most-Starred Python Projects on Github'
+chart.title = 'Most-Starred' + language.title() + 'Projects on Github'
 chart.x_labels = names
 chart.add('', plot_dicts)
-chart.render_to_file('python_repos.svg')
+chart.render_to_file('popular_repos.svg')
