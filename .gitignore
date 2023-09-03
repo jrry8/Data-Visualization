@@ -1,5 +1,4 @@
 myenv
-*.png
-*.svg
-*.csv
-!seatac_monthly.csv
+#*.png
+#*.svg
+
