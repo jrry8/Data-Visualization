@@ -17,10 +17,17 @@ for key in sorted(repo_dict.keys()):
     print(key) 
 '''
 # examine top repos
-names, stars = [], []
+names, plot_dicts = [], []
 for repo_dict in repo_dicts:
     names.append(repo_dict['name'])
-    stars.append(repo_dict['stargazers_count'])
+    # value determines the height of the bar
+    # xlink adds an active link to the bar
+    plot_dict = {
+        'value': repo_dict['stargazers_count'],
+        'label': repo_dict['description'],
+        'xlink': repo_dict['html_url']
+    }
+    plot_dicts.append(plot_dict)
 
 my_config = pygal.Config()
 my_config.x_label_rotation = 45
@@ -35,5 +42,5 @@ my_config.width = 1000
 chart = pygal.Bar(my_config)
 chart.title = 'Most-Starred Python Projects on Github'
 chart.x_labels = names
-chart.add('', stars)
+chart.add('', plot_dicts)
 chart.render_to_file('python_repos.svg')
